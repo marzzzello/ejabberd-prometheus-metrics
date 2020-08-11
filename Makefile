@@ -30,6 +30,8 @@ GO_SERVICE_BUILD_TAG=$(GIT_TAG)
 BUILD_PLATFORM=$(shell go env GOOS)_$(shell go env GOARCH)
 # Docker repository
 DOCKER_REPO=rbobrovnikov/$(SERVICE)
+# Path to Docker file
+PATH_DOCKER_FILE=$(realpath Dockerfile)
 
 
 #
@@ -57,7 +59,7 @@ go_get:
 
 go_build:
 	@echo '>>> Building go binary.'
-	@go build $(GO_BUILD_FLAGS) -o $(SERVICE) $(GO_PATH_SERVICE_MAIN);
+	@go build -o $(SERVICE) $(GO_PATH_SERVICE_MAIN);
 
 #
 # Docker targets
