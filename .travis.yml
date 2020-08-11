@@ -1,0 +1,33 @@
+sudo: required
+
+services:
+  - docker
+
+language: go
+
+go:
+  - stable
+
+env:
+  global:
+    - GIT_TAG=$TRAVIS_TAG
+    - GIT_BRANCH=$TRAVIS_BRANCH
+    - GIT_COMMIT=$TRAVIS_COMMIT
+
+before_install:
+  - docker login -u $ARTIFACT_REGISTRY_USERNAME -p $ARTIFACT_REGISTRY_PASSWORD
+
+script:
+  - make init
+  - make build
+  - make docker_build_image
+
+deploy:
+  - provider: script
+    script: make docker_registry_push
+    skip_cleanup: true
+    on:
+      all_branches: true
+
+after_success:
+  - make docker_inspect
