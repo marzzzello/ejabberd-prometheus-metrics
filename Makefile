@@ -80,7 +80,7 @@ docker_build_image:
 		--build-arg GIT_TAG=$(GO_SERVICE_BUILD_TAG) \
 		--build-arg GIT_BRANCH=$(GO_SERVICE_BUILD_BRANCH) \
     --build-arg GIT_COMMIT=$(GO_SERVICE_BUILD_COMMIT) \
-		--build-arg GO_SERVICE_IMPORT_PATH=$(GO_SERVICE_IMPORT_PATH)
+		--build-arg GO_SERVICE_IMPORT_PATH=$(GO_SERVICE_IMPORT_PATH) \
 		.
 
 
