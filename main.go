@@ -23,14 +23,6 @@ type EjabberdConf struct {
 	APIToken  string `required:"true" split_words:"true"`
 }
 
-// HTTPReqParams to form URL
-// type HTTPReqParams struct {
-// 	Schema string
-// 	Host   string
-// 	Port   string
-// 	Token  string
-// }
-
 // Define metrics
 var (
 	ejabberdConnectedUsersNumber = prometheus.NewGauge(
@@ -178,24 +170,4 @@ func main() {
 	log.Printf(serviceName+" started at %s\n", listenAddr)
 	log.Fatal(http.ListenAndServe(listenAddr, nil))
 
-	// body, err := ioutil.ReadAll(resp.Body)
-	// if err != nil {
-	// 	log.Fatal("Error reading body. ", err)
-	// }
-
-	// fmt.Printf("BODY: %v\n", body)
-
-	// type ejabberdRespNumSessions struct {
-	// 	NumSessions int
-	// }
-
-	// type ejabberdRespCluster struct {
-	// 	node string
-	// }
-
-	// var unmarchResp ejabberdRespNumSessions
-	// json.Unmarshal([]byte(body), &unmarchResp)
-
-	// fmt.Printf("UNMARSHALED: %v\n", unmarchResp.NumSessions)
-	// fmt.Println(unmarchResp)
 }
