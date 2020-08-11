@@ -16,12 +16,12 @@ FROM golang:1.14 as base_go_docker_image
 ARG GIT_TAG
 ARG GIT_BRANCH
 ARG GIT_COMMIT
-
 ENV GIT_TAG=$GIT_TAG
 ENV GIT_BRANCH=$GIT_BRANCH
 ENV GIT_COMMIT=$GIT_COMMIT
 # Create sources directory inside the container and copy project files.
 RUN echo $GO_SERVICE_IMPORT_PATH
+RUN echo $PATH_GO_SOURCES
 RUN mkdir -p $GO_SERVICE_IMPORT_PATH/
 WORKDIR $PATH_GO_SOURCES
 RUN ls -la $PATH_GO_SOURCES
