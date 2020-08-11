@@ -23,6 +23,8 @@ ENV GIT_COMMIT=$GIT_COMMIT
 # Create sources directory inside the container and copy project files.
 RUN mkdir -p $GO_SERVICE_IMPORT_PATH/
 WORKDIR $PATH_GO_SOURCES
+RUN ls -la $PATH_GO_SOURCES
+RUN ls -la $GO_SERVICE_IMPORT_PATH
 COPY . $PATH_GO_SOURCES
 # Build
 RUN make build
