@@ -22,12 +22,8 @@ ENV GIT_TAG=$GIT_TAG
 ENV GIT_BRANCH=$GIT_BRANCH
 ENV GIT_COMMIT=$GIT_COMMIT
 # Create sources directory inside the container and copy project files.
-RUN echo $GO_SERVICE_IMPORT_PATH
-RUN echo $PATH_GO_SOURCES
 RUN mkdir -p $GO_SERVICE_IMPORT_PATH/
 WORKDIR $PATH_GO_SOURCES
-RUN ls -la $PATH_GO_SOURCES
-RUN ls -la $GO_SERVICE_IMPORT_PATH
 COPY . $PATH_GO_SOURCES
 # Build
 RUN make build
@@ -42,6 +38,7 @@ LABEL key="Ruslan Bobrovnikov <ruslan.bobrovnikov@gmail.com>"
 ARG GIT_TAG
 ARG GIT_BRANCH
 ARG GIT_COMMIT
+ARG PATH_GO_SOURCES
 # Container labels.
 LABEL branch=$GIT_BRANCH
 LABEL commit=$GIT_COMMIT
