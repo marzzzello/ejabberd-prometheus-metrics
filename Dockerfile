@@ -21,11 +21,12 @@ ENV GIT_TAG=$GIT_TAG
 ENV GIT_BRANCH=$GIT_BRANCH
 ENV GIT_COMMIT=$GIT_COMMIT
 # Create sources directory inside the container and copy project files.
-RUN mkdir -p ${GO_SERVICE_IMPORT_PATH}/
-WORKDIR ${PATH_GO_SOURCES}
-RUN ls -la ${PATH_GO_SOURCES}
-RUN ls -la ${GO_SERVICE_IMPORT_PATH}
-COPY . ${PATH_GO_SOURCES}
+RUN echo $GO_SERVICE_IMPORT_PATH
+RUN mkdir -p $GO_SERVICE_IMPORT_PATH/
+WORKDIR $PATH_GO_SOURCES
+RUN ls -la $PATH_GO_SOURCES
+RUN ls -la $GO_SERVICE_IMPORT_PATH
+COPY . $PATH_GO_SOURCES
 # Build
 RUN make build
 
@@ -45,7 +46,7 @@ LABEL commit=$GIT_COMMIT
 # Copy certificates and binary into the destination docker image.
 COPY --from=base_go_docker_image /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
 COPY --from=base_go_docker_image /etc/passwd /etc/passwd
-COPY --from=base_go_docker_image ${PATH_GO_SOURCES}/ejabberd-prometheus-metrics /ejabberd-prometheus-metrics
+COPY --from=base_go_docker_image $PATH_GO_SOURCES/ejabberd-prometheus-metrics /ejabberd-prometheus-metrics
 # Container settings.
 ENV PORT 8080
 EXPOSE 8080
