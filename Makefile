@@ -31,7 +31,7 @@ BUILD_PLATFORM=$(shell go env GOOS)_$(shell go env GOARCH)
 # Docker repository
 DOCKER_REPO=rbobrovnikov/$(SERVICE)
 # Path to Docker file
-PATH_DOCKER_FILE=$(realpath Dockerfile)
+PATH_DOCKER_FILE=$(realpath ./Dockerfile)
 # Service go module import path.
 GO_SERVICE_IMPORT_PATH=$(shell go list ./src)
 
@@ -40,11 +40,15 @@ GO_SERVICE_IMPORT_PATH=$(shell go list ./src)
 # Build targets
 #
 
-# init target substitutes all the template variables in build files (like Dockerfile and docer-compose configs) with
+# init target substitutes all the template variables in build files (like Dockerfile and docker-compose configs) with
 # correct their correct values.
 init:
 	@echo '>>> Initting the project.'
-	@sed -i'' "s/{% SERVICE_NAME %}/$(SERVICE)/g" $(PATH_DOCKER_FILE);
+	@if [ "Darwin" = "$(shell uname -s)" ]; then \
+		sed -i '' -e "s/{% SERVICE_NAME %}/$(SERVICE)/g" $(PATH_DOCKER_FILE) $(PATH_DOCKER_COMPOSE_FILE); \
+	else \
+		sed -i'' "s/{% SERVICE_NAME %}/$(SERVICE)/g" $(PATH_DOCKER_FILE) $(PATH_DOCKER_COMPOSE_FILE); \
+	fi;  \
 
 build: clean go_get go_build
 

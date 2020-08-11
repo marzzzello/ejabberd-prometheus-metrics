@@ -43,9 +43,9 @@ LABEL commit=$GIT_COMMIT
 # Copy certificates and binary into the destination docker image.
 COPY --from=base_go_docker_image /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
 COPY --from=base_go_docker_image /etc/passwd /etc/passwd
-COPY --from=base_go_docker_image $PATH_GO_SOURCES/{% SERVICE_NAME %} /{% SERVICE_NAME %}
+COPY --from=base_go_docker_image $PATH_GO_SOURCES/ejabberd-prometheus-metrics /ejabberd-prometheus-metrics
 # Container settings.
 ENV PORT 8080
 EXPOSE 8080
 USER nobody
-ENTRYPOINT ["/{% SERVICE_NAME %}"]
+ENTRYPOINT ["/ejabberd-prometheus-metrics"]
