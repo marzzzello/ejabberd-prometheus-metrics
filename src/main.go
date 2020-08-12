@@ -19,7 +19,7 @@ const serviceName = "ejabberd-metrics-exporter"
 type EjabberdConf struct {
 	APIHost      string `required:"true" split_words:"true"`
 	APIPort      string `default:"5443" split_words:"true"`
-	APIUrlSchema string `default:"http" split_words:"true"`
+	APIUrlSchema string `default:"https" split_words:"true"`
 	APIToken     string `required:"true" split_words:"true"`
 }
 
