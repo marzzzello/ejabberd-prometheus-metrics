@@ -71,7 +71,8 @@ go_get:
 
 go_build:
 	@echo '>>> Building go binary.'
-	@CGO_ENABLED=0 GOOS=linux go build $(GO_BUILD_FLAGS) -o $(SERVICE) $(GO_PATH_SERVICE_MAIN)
+	@echo $(GO_BUILD_FLAGS)
+	@go build $(GO_BUILD_FLAGS) -o $(SERVICE) $(GO_PATH_SERVICE_MAIN)
 
 #
 # Docker targets
