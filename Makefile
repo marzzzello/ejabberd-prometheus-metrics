@@ -35,6 +35,9 @@ PATH_DOCKER_FILE=$(realpath ./Dockerfile)
 # Service go module import path.
 GO_SERVICE_IMPORT_PATH=$(shell go list ./src)
 
+ifneq ($(shell go env GOOS),darwin)
+    GO_BUILD_LDFLAGS+= -linkmode external -extldflags '-static'
+endif
 
 #
 # Build targets
