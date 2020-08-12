@@ -39,6 +39,9 @@ ifneq ($(shell go env GOOS),darwin)
     GO_BUILD_LDFLAGS+= -linkmode external -extldflags '-static'
 endif
 
+# Go build flags.
+GO_BUILD_FLAGS=-v --ldflags "$(GO_BUILD_LDFLAGS)"
+
 #
 # Build targets
 #
@@ -68,7 +71,7 @@ go_get:
 
 go_build:
 	@echo '>>> Building go binary.'
-	@go build -o $(SERVICE) $(GO_PATH_SERVICE_MAIN);
+	@go build $(GO_BUILD_FLAGS) -o $(SERVICE) $(GO_PATH_SERVICE_MAIN);
 
 #
 # Docker targets
