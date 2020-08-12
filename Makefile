@@ -40,7 +40,7 @@ ifneq ($(shell go env GOOS),darwin)
 endif
 
 # Go build flags.
-GO_BUILD_FLAGS=-v --ldflags $(GO_BUILD_LDFLAGS) -a -installsuffix cgo
+GO_BUILD_FLAGS=-v --ldflags "$(GO_BUILD_LDFLAGS)" -a -installsuffix cgo
 
 #
 # Build targets
