@@ -17,10 +17,10 @@ const serviceName = "ejabberd-metrics-exporter"
 
 // EjabberdConf configuration parameters
 type EjabberdConf struct {
-	Host      string `required:"true" split_words:"true"`
-	Port      string `default:"5443" split_words:"true"`
-	URLSchema string `default:"http" split_words:"true"`
-	APIToken  string `required:"true" split_words:"true"`
+	APIHost      string `required:"true" split_words:"true"`
+	APIPort      string `default:"5443" split_words:"true"`
+	APIUrlSchema string `default:"http" split_words:"true"`
+	APIToken     string `required:"true" split_words:"true"`
 }
 
 // Define metrics
@@ -68,7 +68,7 @@ var (
 	// 	})
 )
 
-var listenAddr string = ":8080"
+var listenAddr string = ":9334"
 
 // Record metrics values
 func recordMetrics(schema string, host string, port string, token string) {
@@ -159,9 +159,9 @@ func main() {
 	if err != nil {
 		log.Fatal(err.Error())
 	}
-	schema := ejabberdCfg.URLSchema
-	host := ejabberdCfg.Host
-	port := ejabberdCfg.Port
+	schema := ejabberdCfg.APIUrlSchema
+	host := ejabberdCfg.APIHost
+	port := ejabberdCfg.APIPort
 	token := "Basic " + ejabberdCfg.APIToken
 
 	recordMetrics(schema, host, port, token)

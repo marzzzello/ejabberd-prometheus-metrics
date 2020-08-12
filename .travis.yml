@@ -18,8 +18,6 @@ before_install:
   - docker login -u $ARTIFACT_REGISTRY_USERNAME -p $ARTIFACT_REGISTRY_PASSWORD
 
 script:
-  # - make init
-  # - make build
   - make docker_build_image
 
 deploy:

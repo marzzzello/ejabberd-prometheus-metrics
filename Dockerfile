@@ -47,7 +47,7 @@ COPY --from=base_go_docker_image /etc/ssl/certs/ca-certificates.crt /etc/ssl/cer
 COPY --from=base_go_docker_image /etc/passwd /etc/passwd
 COPY --from=base_go_docker_image $PATH_GO_SOURCES/ejabberd-prometheus-metrics /ejabberd-prometheus-metrics
 # Container settings.
-ENV PORT 8080
-EXPOSE 8080
+ENV PORT 9334
+EXPOSE 9334
 USER nobody
 ENTRYPOINT ["/ejabberd-prometheus-metrics"]
