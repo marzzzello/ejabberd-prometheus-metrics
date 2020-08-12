@@ -36,11 +36,11 @@ PATH_DOCKER_FILE=$(realpath ./Dockerfile)
 GO_SERVICE_IMPORT_PATH=$(shell go list ./src)
 
 ifneq ($(shell go env GOOS),darwin)
-    GO_BUILD_LDFLAGS=-linkmode external -extldflags -static
+    GO_BUILD_LDFLAGS+= -linkmode external -extldflags '-static'
 endif
 
 # Go build flags.
-GO_BUILD_FLAGS=-v -ldflags "$(GO_BUILD_LDFLAGS)"
+GO_BUILD_FLAGS=-v --ldflags "$(GO_BUILD_LDFLAGS)"
 
 #
 # Build targets
@@ -71,7 +71,7 @@ go_get:
 
 go_build:
 	@echo '>>> Building go binary.'
-	@echo $(GO_BUILD_FLAGS)
+	@echo GO_BUILD_FLAGS=$(GO_BUILD_FLAGS)
 	@go build $(GO_BUILD_FLAGS) -o $(SERVICE) $(GO_PATH_SERVICE_MAIN)
 
 #
