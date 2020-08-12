@@ -6,7 +6,7 @@ services:
 language: go
 
 go:
-  - stable
+  - 1.14.5
 
 env:
   global:
