@@ -25,8 +25,12 @@ ENV CGO_ENABLED=0
 ENV GOOS=linux
 # Create sources directory inside the container and copy project files.
 RUN mkdir -p $GO_SERVICE_IMPORT_PATH/
+RUN echo ${GO_SERVICE_IMPORT_PATH}
+RUN echo ${PATH_GO_SOURCES}
 WORKDIR $PATH_GO_SOURCES
+RUN pwd
 COPY . $PATH_GO_SOURCES
+RUN ls -la
 # Build
 RUN make build
 
