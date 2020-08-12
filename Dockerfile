@@ -46,6 +46,7 @@ LABEL commit=$GIT_COMMIT
 COPY --from=base_go_docker_image /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
 COPY --from=base_go_docker_image /etc/passwd /etc/passwd
 COPY --from=base_go_docker_image $PATH_GO_SOURCES/ejabberd-prometheus-metrics /ejabberd-prometheus-metrics
+RUN ls -la /
 # Container settings.
 ENV PORT 9334
 EXPOSE 9334
