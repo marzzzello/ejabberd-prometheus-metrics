@@ -10,7 +10,7 @@ import (
 	"strings"
 	"time"
 
-	"ejabberd-prometheus-metrics/build"
+	"build"
 
 	"github.com/kelseyhightower/envconfig"
 	"github.com/prometheus/client_golang/prometheus"
