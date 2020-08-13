@@ -34,13 +34,18 @@ DOCKER_REPO=rbobrovnikov/$(SERVICE)
 PATH_DOCKER_FILE=$(realpath ./Dockerfile)
 # Service go module import path.
 GO_SERVICE_IMPORT_PATH=$(shell go list ./src)
+# Build LD flags. Beware that MacOS build is dynamic one.
+GO_BUILD_LDFLAGS=  -X main.BuildCommit=$(GO_SERVICE_BUILD_COMMIT)
+GO_BUILD_LDFLAGS+= -X main.BuildBranch=$(GO_SERVICE_BUILD_BRANCH)
+GO_BUILD_LDFLAGS+= -X main.BuildTag=$(GO_SERVICE_BUILD_TAG)
+GO_BUILD_LDFLAGS+= -X main.BuildDate=$(shell date -u +%Y.%m.%d/%H:%M)
 
 ifneq ($(shell go env GOOS),darwin)
-    GO_BUILD_LDFLAGS= -linkmode external -extldflags -static
+    GO_BUILD_LDFLAGS+= -linkmode external -extldflags -static
 endif
 
 # Go build flags.
-GO_BUILD_FLAGS=-v -ldflags "$(GO_BUILD_LDFLAGS)"
+GO_BUILD_FLAGS=-v -ldflags "$(GO_BUILD_LDFLAGS)" -a -installsuffix cgo
 
 #
 # Build targets

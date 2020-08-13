@@ -21,16 +21,12 @@ ARG GO_SERVICE_IMPORT_PATH
 ENV GIT_TAG=$GIT_TAG
 ENV GIT_BRANCH=$GIT_BRANCH
 ENV GIT_COMMIT=$GIT_COMMIT
-ENV CGO_ENABLED=1
-ENV GOOS=linux
+# ENV CGO_ENABLED=1
+# ENV GOOS=linux
 # Create sources directory inside the container and copy project files.
 RUN mkdir -p $GO_SERVICE_IMPORT_PATH/
-RUN echo ${GO_SERVICE_IMPORT_PATH}
-RUN echo ${PATH_GO_SOURCES}
 WORKDIR $PATH_GO_SOURCES
-RUN pwd
 COPY . $PATH_GO_SOURCES
-RUN ls -la
 # Build
 RUN make build
 
