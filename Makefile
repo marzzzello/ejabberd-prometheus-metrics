@@ -41,11 +41,11 @@ GO_BUILD_LDFLAGS+= -X main.BuildTag=$(GO_SERVICE_BUILD_TAG)
 GO_BUILD_LDFLAGS+= -X main.BuildDate=$(shell date -u +%Y.%m.%d/%H:%M)
 
 ifneq ($(shell go env GOOS),darwin)
-    GO_BUILD_LDFLAGS+= -linkmode external -extldflags -static
+    GO_BUILD_LDFLAGS+= -linkmode external -extldflags '-static'
 endif
 
 # Go build flags.
-GO_BUILD_FLAGS=-v -ldflags "$(GO_BUILD_LDFLAGS)" -a -installsuffix cgo
+GO_BUILD_FLAGS=-v -ldflags "$(GO_BUILD_LDFLAGS)"
 
 #
 # Build targets
