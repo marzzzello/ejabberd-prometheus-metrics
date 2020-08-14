@@ -19,7 +19,7 @@ func main() {
 
 	http.Handle("/metrics", promhttp.Handler())
 
-	logger.Info.Printf(config.ServiceName+" started at %s\n\nBuild info:\nDate: %s\nTag: %s\nBranch: %s\nCommit: %s\n", config.ListenAddr, logger.BuildDate, logger.BuildTag, logger.BuildBranch, logger.BuildCommit)
+	logger.Info.Printf(config.ServiceName+" started at %s\nBuild info:\nDate: %s\nTag: %s\nBranch: %s\nCommit: %s\n", config.ListenAddr, logger.BuildDate, logger.BuildTag, logger.BuildBranch, logger.BuildCommit)
 	log.Fatal(http.ListenAndServe(config.ListenAddr, nil))
 
 }
