@@ -16,6 +16,10 @@
 SERVICE=ejabberd-prometheus-metrics
 # Path to service entry point.
 GO_PATH_SERVICE_MAIN=./src
+# Path to logger.go file with build version information.
+GO_SERVICE_BUILD_INFO_PACKAGE=github.com/rbobrovnikov/ejabberd-prometheus-metrics/core/logger
+# Enable Go Modules.
+GO111MODULE=on
 
 #
 # General variables
@@ -96,6 +100,7 @@ docker_build_image:
 		--build-arg GIT_TAG=$(GO_SERVICE_BUILD_TAG) \
 		--build-arg GIT_BRANCH=$(GO_SERVICE_BUILD_BRANCH) \
     --build-arg GIT_COMMIT=$(GO_SERVICE_BUILD_COMMIT) \
+		--build-arg GO111MODULE=$(GO111MODULE) \
 		--build-arg GO_SERVICE_IMPORT_PATH=$(GO_SERVICE_IMPORT_PATH) \
 		.
 
