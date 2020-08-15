@@ -58,21 +58,21 @@ func RecordMetrics(schema string, host string, port string, token string) {
 	scrapeInterval := (time.Duration(5) * time.Second)
 	go func() {
 		for {
-			EjabberdConnectedUsersNumber.Set(http.HttpRequest(schema, host, port, token, "connected_users_number", reqBodyJSONEmpty, "num_sessions"))
+			EjabberdConnectedUsersNumber.Set(http.EjabberAPICommonRequest(schema, host, port, token, "connected_users_number", reqBodyJSONEmpty, "num_sessions"))
 			time.Sleep(scrapeInterval)
 		}
 	}()
 
 	go func() {
 		for {
-			EjabberdIncommingS2SNumber.Set(http.HttpRequest(schema, host, port, token, "incoming_s2s_number", reqBodyJSONEmpty, "s2s_incoming"))
+			EjabberdIncommingS2SNumber.Set(http.EjabberAPICommonRequest(schema, host, port, token, "incoming_s2s_number", reqBodyJSONEmpty, "s2s_incoming"))
 			time.Sleep(scrapeInterval)
 		}
 	}()
 
 	go func() {
 		for {
-			EjabberdOutgoingS2SNumber.Set(http.HttpRequest(schema, host, port, token, "outgoing_s2s_number", reqBodyJSONEmpty, "s2s_outgoing"))
+			EjabberdOutgoingS2SNumber.Set(http.EjabberAPICommonRequest(schema, host, port, token, "outgoing_s2s_number", reqBodyJSONEmpty, "s2s_outgoing"))
 			time.Sleep(scrapeInterval)
 		}
 	}()
@@ -80,7 +80,7 @@ func RecordMetrics(schema string, host string, port string, token string) {
 	go func() {
 		reqBodyJSON := `{"name": "registeredusers"}`
 		for {
-			EjabberdRegisteredUsers.Set(http.HttpRequest(schema, host, port, token, "stats", reqBodyJSON, "stat"))
+			EjabberdRegisteredUsers.Set(http.EjabberAPICommonRequest(schema, host, port, token, "stats", reqBodyJSON, "stat"))
 			time.Sleep(scrapeInterval)
 		}
 	}()
@@ -88,7 +88,7 @@ func RecordMetrics(schema string, host string, port string, token string) {
 	go func() {
 		reqBodyJSON := `{"name": "onlineusers"}`
 		for {
-			EjabberdOnlineUsers.Set(http.HttpRequest(schema, host, port, token, "stats", reqBodyJSON, "stat"))
+			EjabberdOnlineUsers.Set(http.EjabberAPICommonRequest(schema, host, port, token, "stats", reqBodyJSON, "stat"))
 			time.Sleep(scrapeInterval)
 		}
 	}()

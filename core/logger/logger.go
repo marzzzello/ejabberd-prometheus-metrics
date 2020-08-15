@@ -23,8 +23,8 @@ var (
 	Error   *log.Logger
 )
 
-// Logger
-func LoggerInit(infoHandle io.Writer, warningHandle io.Writer, errorHandle io.Writer) {
+// InitLogLevels is a logger initialization
+func InitLogLevels(infoHandle, warningHandle, errorHandle io.Writer) {
 	Info = log.New(infoHandle, "[INFO] ", log.Ldate|log.Ltime)
 	Warning = log.New(warningHandle, "[WARN] ", log.Ldate|log.Ltime)
 	Error = log.New(errorHandle, "[ERROR] ", log.Ldate|log.Ltime)

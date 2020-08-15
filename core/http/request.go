@@ -8,8 +8,8 @@ import (
 	"time"
 )
 
-// HttpRequest to Ejabberd HTTP API
-func HttpRequest(schema string, host string, port string, token string, endpoint string, reqBody string, ejabberdMetricName string) float64 {
+// EjabberAPICommonRequest to Ejabberd HTTP API
+func EjabberAPICommonRequest(schema, host, port, token, endpoint, reqBody, ejabberdMetricName string) float64 {
 
 	url := schema + "://" + host + ":" + port + "/api/" + endpoint
 

@@ -12,7 +12,7 @@ import (
 )
 
 func main() {
-	logger.LoggerInit(os.Stdout, os.Stdout, os.Stderr)
+	logger.InitLogLevels(os.Stdout, os.Stdout, os.Stderr)
 
 	metrics.RegisterMetrics()
 	metrics.RecordMetrics(config.Config())
