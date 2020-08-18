@@ -18,21 +18,18 @@ func main() {
 
 	metrics.RegisterMetrics()
 	http.Handle("/metrics", promhttp.Handler())
+	ejabberdAPICheck()
 	logger.Info.Fatal(http.ListenAndServe(config.ListenAddr, nil))
+}
 
-	// Check Ejabberd API availability
-	ejabberdAPIStatusCode := 0
-	for ejabberdAPIStatusCode != 200 {
+// Check Ejabberd API availability
+func ejabberdAPICheck() {
+	for ejabberdAPIStatusCode := 0; ejabberdAPIStatusCode != 200; {
 		s, h, p, t := config.Config()
 		reqBodyJSONEmpty := `{}`
-		_, ejabberdAPIStatusCode := httprequest.EjabberAPICommonRequest(httprequest.HTTPBaseParams{Schema: s, Host: h, Port: p, Token: t, Endpoint: "status", ReqBody: reqBodyJSONEmpty})
-		if ejabberdAPIStatusCode == 200 {
-			// metrics.RegisterMetrics()
-			metrics.RecordMetrics(config.Config())
-			// http.Handle("/metrics", promhttp.Handler())
-			logger.Info.Printf("Ejabberd API is available. Ready to collect metrics!")
-			// logger.Info.Fatal(http.ListenAndServe(config.ListenAddr, nil))
-		}
+		_, ejabberdAPIStatusCode = httprequest.EjabberAPICommonRequest(httprequest.HTTPBaseParams{Schema: s, Host: h, Port: p, Token: t, Endpoint: "status", ReqBody: reqBodyJSONEmpty})
 		time.Sleep(5 * time.Second)
 	}
+	metrics.RecordMetrics(config.Config())
+	logger.Info.Printf("Ejabberd API is available. Ready to collect metrics!")
 }

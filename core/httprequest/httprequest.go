@@ -51,7 +51,6 @@ func EjabberAPICommonRequest(p HTTPBaseParams) (float64, int) {
 	if p.EjabberdMetricName != "" {
 		ejabberdMetricValue := (body[p.EjabberdMetricName].(float64))
 		return ejabberdMetricValue, resp.StatusCode
-	} else {
-		return 0, resp.StatusCode
 	}
+	return 0, resp.StatusCode
 }
