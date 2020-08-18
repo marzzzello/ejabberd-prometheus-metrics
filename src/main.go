@@ -17,7 +17,7 @@ func main() {
 	logger.Info.Printf(config.ServiceName+" started at %s\nBuild info: [ Date: %s | Tag: %s | Branch: %s | Commit: %s ]", config.ListenAddr, logger.BuildDate, logger.BuildTag, logger.BuildBranch, logger.BuildCommit)
 
 	metrics.RegisterMetrics()
-	http.Handle("/metrics", promhttp.Handler())
+	http.Handle("/_service/metrics", promhttp.Handler())
 	ejabberdAPICheck()
 	logger.Info.Fatal(http.ListenAndServe(config.ListenAddr, nil))
 }
