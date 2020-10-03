@@ -56,45 +56,41 @@ var (
 func RecordMetrics(schema string, host string, port string, token string) {
 	reqBodyJSONEmpty := `{}`
 	scrapeInterval := (time.Duration(5) * time.Second)
+	ticker := time.NewTicker(scrapeInterval)
 	go func() {
-		for {
+		for range ticker.C {
 			ejabberdMetricValue, _ := httprequest.EjabberAPICommonRequest(httprequest.HTTPBaseParams{schema, host, port, token, "connected_users_number", reqBodyJSONEmpty, "num_sessions"})
 			EjabberdConnectedUsersNumber.Set(ejabberdMetricValue)
-			time.Sleep(scrapeInterval)
 		}
 	}()
 
 	go func() {
-		for {
+		for range ticker.C {
 			ejabberdMetricValue, _ := httprequest.EjabberAPICommonRequest(httprequest.HTTPBaseParams{schema, host, port, token, "incoming_s2s_number", reqBodyJSONEmpty, "s2s_incoming"})
 			EjabberdIncommingS2SNumber.Set(ejabberdMetricValue)
-			time.Sleep(scrapeInterval)
 		}
 	}()
 
 	go func() {
-		for {
+		for range ticker.C {
 			ejabberdMetricValue, _ := httprequest.EjabberAPICommonRequest(httprequest.HTTPBaseParams{schema, host, port, token, "outgoing_s2s_number", reqBodyJSONEmpty, "s2s_outgoing"})
 			EjabberdOutgoingS2SNumber.Set(ejabberdMetricValue)
-			time.Sleep(scrapeInterval)
 		}
 	}()
 
 	go func() {
 		reqBodyJSON := `{"name": "registeredusers"}`
-		for {
+		for range ticker.C {
 			ejabberdMetricValue, _ := httprequest.EjabberAPICommonRequest(httprequest.HTTPBaseParams{schema, host, port, token, "stats", reqBodyJSON, "stat"})
 			EjabberdRegisteredUsers.Set(ejabberdMetricValue)
-			time.Sleep(scrapeInterval)
 		}
 	}()
 
 	go func() {
 		reqBodyJSON := `{"name": "onlineusers"}`
-		for {
+		for range ticker.C {
 			ejabberdMetricValue, _ := httprequest.EjabberAPICommonRequest(httprequest.HTTPBaseParams{schema, host, port, token, "stats", reqBodyJSON, "stat"})
 			EjabberdOnlineUsers.Set(ejabberdMetricValue)
-			time.Sleep(scrapeInterval)
 		}
 	}()
 }

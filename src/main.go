@@ -17,18 +17,18 @@ func main() {
 	logger.Info.Printf(config.ServiceName+" started at %s\nBuild info: [ Date: %s | Tag: %s | Branch: %s | Commit: %s ]", config.ListenAddr, logger.BuildDate, logger.BuildTag, logger.BuildBranch, logger.BuildCommit)
 
 	metrics.RegisterMetrics()
-	http.Handle("/_service/metrics", promhttp.Handler())
+	http.Handle("/metrics", promhttp.Handler())
 	ejabberdAPICheck()
 	logger.Info.Fatal(http.ListenAndServe(config.ListenAddr, nil))
 }
 
 // Check Ejabberd API availability
 func ejabberdAPICheck() {
-	for ejabberdAPIStatusCode := 0; ejabberdAPIStatusCode != 200; {
-		s, h, p, t := config.Config()
-		reqBodyJSONEmpty := `{}`
+	s, h, p, t := config.Config()
+	reqBodyJSONEmpty := `{}`
+	ticker := time.NewTicker(5 * time.Second)
+	for ejabberdAPIStatusCode := 0; ejabberdAPIStatusCode != 200; <-ticker.C {
 		_, ejabberdAPIStatusCode = httprequest.EjabberAPICommonRequest(httprequest.HTTPBaseParams{Schema: s, Host: h, Port: p, Token: t, Endpoint: "status", ReqBody: reqBodyJSONEmpty})
-		time.Sleep(5 * time.Second)
 	}
 	metrics.RecordMetrics(config.Config())
 	logger.Info.Printf("Ejabberd API is available. Ready to collect metrics!")
