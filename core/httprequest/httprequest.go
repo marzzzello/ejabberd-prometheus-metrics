@@ -29,7 +29,8 @@ func EjabberAPICommonRequest(p HTTPBaseParams) (float64, int) {
 
 	req, err := http.NewRequest("POST", url, bytes.NewBuffer(data))
 	if err != nil {
-		logger.Error.Fatal("Error reading request. ", err)
+		logger.Error.Print("Error reading request. ", err)
+		return 0, 0
 	}
 
 	// Set headers
@@ -42,7 +43,8 @@ func EjabberAPICommonRequest(p HTTPBaseParams) (float64, int) {
 	// Send request
 	resp, err := client.Do(req)
 	if err != nil {
-		logger.Error.Fatal("Error reading response. ", err)
+		logger.Error.Print("Error reading response. ", err)
+		return 0, 0
 	}
 	defer resp.Body.Close()
 
