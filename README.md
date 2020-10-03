@@ -9,4 +9,4 @@ EJABBERD_METRICS_EXPORTER_API_PORT       (optional, default: 5443)
 EJABBERD_METRICS_EXPORTER_API_TOKEN
 ```
 
-Metrics exposed via endpoint `/_service/metrics`
+Metrics exposed via endpoint `/metrics`
