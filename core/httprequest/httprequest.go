@@ -11,13 +11,7 @@ import (
 
 // HTTPBaseParams defines basic http parameters
 type HTTPBaseParams struct {
-	Schema             string
-	Host               string
-	Port               string
-	Token              string
-	Endpoint           string
-	ReqBody            string
-	EjabberdMetricName string
+	Schema, Host, Port, Token, Endpoint, ReqBody, EjabberdAPIMetricSourceKey string
 }
 
 // EjabberAPICommonRequest to Ejabberd HTTP API
@@ -48,11 +42,16 @@ func EjabberAPICommonRequest(p HTTPBaseParams) (float64, int) {
 	}
 	defer resp.Body.Close()
 
+	if p.EjabberdAPIMetricSourceKey == "" {
+		var respArr []string
+		json.NewDecoder(resp.Body).Decode(&respArr)
+		ejabberdMetricValue := len(respArr)
+		return float64(ejabberdMetricValue), resp.StatusCode
+	}
+
 	var body map[string]interface{}
 	json.NewDecoder(resp.Body).Decode(&body)
-	if p.EjabberdMetricName != "" {
-		ejabberdMetricValue := (body[p.EjabberdMetricName].(float64))
-		return ejabberdMetricValue, resp.StatusCode
-	}
-	return 0, resp.StatusCode
+	ejabberdMetricValue := (body[p.EjabberdAPIMetricSourceKey].(float64))
+	return ejabberdMetricValue, resp.StatusCode
+
 }

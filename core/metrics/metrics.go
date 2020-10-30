@@ -7,99 +7,172 @@ import (
 	"github.com/rbobrovnikov/ejabberd-prometheus-metrics/core/httprequest"
 )
 
+type metricStruct struct {
+	MetricName, MetricNamespace, MetricHelp, MetricEjabberdAPIEndpoint, MetricEjabberdAPIReqBody, MetricEjabberdAPIMetricSourceKey string
+}
+
 // Define metrics
 var (
-	EjabberdConnectedUsersNumber = prometheus.NewGauge(
-		prometheus.GaugeOpts{
-			Namespace: "ejabberd",
-			Name:      "connected_users_number",
-			Help:      "The number of established sessions",
-		})
+	ejabberdConnectedUsersNumber = metricStruct{
+		MetricName:                       "connected_users_number",
+		MetricHelp:                       "The number of established sessions",
+		MetricEjabberdAPIEndpoint:        "connected_users_number",
+		MetricEjabberdAPIMetricSourceKey: "num_sessions",
+	}
 
-	EjabberdIncommingS2SNumber = prometheus.NewGauge(
-		prometheus.GaugeOpts{
-			Namespace: "ejabberd",
-			Name:      "incoming_s2s_number",
-			Help:      "The number of incoming s2s connections on the node",
-		})
+	ejabberdIncommingS2SNumber = metricStruct{
+		MetricName:                       "incoming_s2s_number",
+		MetricHelp:                       "The number of incoming s2s connections on the node",
+		MetricEjabberdAPIEndpoint:        "incoming_s2s_number",
+		MetricEjabberdAPIMetricSourceKey: "s2s_incoming",
+	}
 
-	EjabberdOutgoingS2SNumber = prometheus.NewGauge(
-		prometheus.GaugeOpts{
-			Namespace: "ejabberd",
-			Name:      "outgoing_s2s_number",
-			Help:      "The number of outgoing s2s connections on the node",
-		})
+	ejabberdOutgoingS2SNumber = metricStruct{
+		MetricName:                       "outgoing_s2s_number",
+		MetricHelp:                       "The number of outgoing s2s connections on the node",
+		MetricEjabberdAPIEndpoint:        "outgoing_s2s_number",
+		MetricEjabberdAPIMetricSourceKey: "s2s_outgoing",
+	}
 
-	EjabberdRegisteredUsers = prometheus.NewGauge(
-		prometheus.GaugeOpts{
-			Namespace: "ejabberd",
-			Name:      "stats_registered_users",
-			Help:      "The number of registered users",
-		})
+	ejabberdRegisteredUsers = metricStruct{
+		MetricName:                       "stats_registered_users",
+		MetricHelp:                       "The number of registered users",
+		MetricEjabberdAPIEndpoint:        "stats",
+		MetricEjabberdAPIMetricSourceKey: "stat",
+		MetricEjabberdAPIReqBody:         `{"name": "registeredusers"}`,
+	}
 
-	EjabberdOnlineUsers = prometheus.NewGauge(
-		prometheus.GaugeOpts{
-			Namespace: "ejabberd",
-			Name:      "stats_online_users",
-			Help:      "The number of online users",
-		})
+	ejabberdOnlineUsers = metricStruct{
+		MetricName:                       "stats_online_users",
+		MetricHelp:                       "The number of online users total",
+		MetricEjabberdAPIEndpoint:        "stats",
+		MetricEjabberdAPIMetricSourceKey: "stat",
+		MetricEjabberdAPIReqBody:         `{"name": "onlineusers"}`,
+	}
 
-	// ejabberdOnlineUsers = prometheus.NewGauge(
-	// 	prometheus.GaugeOpts{
-	// 		Namespace: "ejabberd",
-	// 		Name:      "stats_online_users",
-	// 		Help:      "The number of online users",
-	// 	})
+	ejabberdOnlineUsersNode = metricStruct{
+		MetricName:                       "stats_online_users_node",
+		MetricHelp:                       "The number of online users on the node",
+		MetricEjabberdAPIEndpoint:        "stats",
+		MetricEjabberdAPIMetricSourceKey: "stat",
+		MetricEjabberdAPIReqBody:         `{"name": "onlineusersnode"}`,
+	}
+
+	ejabberdUptimeSeconds = metricStruct{
+		MetricName:                       "stats_uptimeseconds",
+		MetricHelp:                       "Uptime seconds",
+		MetricEjabberdAPIEndpoint:        "stats",
+		MetricEjabberdAPIMetricSourceKey: "stat",
+		MetricEjabberdAPIReqBody:         `{"name": "uptimeseconds"}`,
+	}
+
+	ejabberdProcesses = metricStruct{
+		MetricName:                       "stats_processes",
+		MetricHelp:                       "The number of processes",
+		MetricEjabberdAPIEndpoint:        "stats",
+		MetricEjabberdAPIMetricSourceKey: "stat",
+		MetricEjabberdAPIReqBody:         `{"name": "processes"}`,
+	}
+
+	ejabberdClusterNodesCount = metricStruct{
+		MetricName:                "cluster_nodes_count",
+		MetricHelp:                "The number of cluster nodes",
+		MetricEjabberdAPIEndpoint: "list_cluster",
+	}
+
+	ejabberdMUCNumber = metricStruct{
+		MetricName:                "muc_online_rooms",
+		MetricHelp:                "Number of existing rooms (MUC)",
+		MetricEjabberdAPIEndpoint: "muc_online_rooms",
+		MetricEjabberdAPIReqBody:  `{"service": "global"}`,
+	}
+
+	ejabberdMUCRoomsEmptyNumber = metricStruct{
+		MetricName:                "muc_rooms_empty_number",
+		MetricHelp:                "Number of the rooms (MUC) that have no messages in archive",
+		MetricEjabberdAPIEndpoint: "rooms_empty_list",
+		MetricEjabberdAPIReqBody:  `{"service": "global"}`,
+	}
+
+	ejabberdMUCRoomsUnusedNumber30days = metricStruct{
+		MetricName:                "muc_rooms_unused_30days_number",
+		MetricHelp:                "Number of the rooms (MUC) that are unused for 30 days in the service",
+		MetricEjabberdAPIEndpoint: "rooms_unused_list",
+		MetricEjabberdAPIReqBody:  `{"service": "global", "days": 30}`,
+	}
+
+	ejabberdMUCRoomsUnusedNumber90days = metricStruct{
+		MetricName:                "muc_rooms_unused_90days_number",
+		MetricHelp:                "Number of the rooms (MUC) that are unused for 90 days in the service",
+		MetricEjabberdAPIEndpoint: "rooms_unused_list",
+		MetricEjabberdAPIReqBody:  `{"service": "global", "days": 90}`,
+	}
+
+	ejabberdMUCRoomsUnusedNumber180days = metricStruct{
+		MetricName:                "muc_rooms_unused_180days_number",
+		MetricHelp:                "Number of the rooms (MUC) that are unused for 180 days in the service",
+		MetricEjabberdAPIEndpoint: "rooms_unused_list",
+		MetricEjabberdAPIReqBody:  `{"service": "global", "days": 180}`,
+	}
+
+	ejabberdMUCRoomsUnusedNumber360days = metricStruct{
+		MetricName:                "muc_rooms_unused_360days_number",
+		MetricHelp:                "Number of the rooms (MUC) that are unused for 360 days in the service",
+		MetricEjabberdAPIEndpoint: "rooms_unused_list",
+		MetricEjabberdAPIReqBody:  `{"service": "global", "days": 360}`,
+	}
 )
 
 // RecordMetrics generates metrics
 func RecordMetrics(schema string, host string, port string, token string) {
-	reqBodyJSONEmpty := `{}`
-	scrapeInterval := (time.Duration(5) * time.Second)
-	ticker := time.NewTicker(scrapeInterval)
-	go func() {
-		for range ticker.C {
-			ejabberdMetricValue, _ := httprequest.EjabberAPICommonRequest(httprequest.HTTPBaseParams{schema, host, port, token, "connected_users_number", reqBodyJSONEmpty, "num_sessions"})
-			EjabberdConnectedUsersNumber.Set(ejabberdMetricValue)
-		}
-	}()
 
-	go func() {
-		for range ticker.C {
-			ejabberdMetricValue, _ := httprequest.EjabberAPICommonRequest(httprequest.HTTPBaseParams{schema, host, port, token, "incoming_s2s_number", reqBodyJSONEmpty, "s2s_incoming"})
-			EjabberdIncommingS2SNumber.Set(ejabberdMetricValue)
-		}
-	}()
+	metricsList := []metricStruct{
+		ejabberdConnectedUsersNumber,
+		ejabberdIncommingS2SNumber,
+		ejabberdOutgoingS2SNumber,
+		ejabberdRegisteredUsers,
+		ejabberdOnlineUsers,
+		ejabberdOnlineUsersNode,
+		ejabberdUptimeSeconds,
+		ejabberdProcesses,
+		ejabberdClusterNodesCount,
+		ejabberdMUCNumber,
+		ejabberdMUCRoomsEmptyNumber,
+		ejabberdMUCRoomsUnusedNumber30days,
+		ejabberdMUCRoomsUnusedNumber90days,
+		ejabberdMUCRoomsUnusedNumber180days,
+		ejabberdMUCRoomsUnusedNumber360days,
+	}
 
-	go func() {
-		for range ticker.C {
-			ejabberdMetricValue, _ := httprequest.EjabberAPICommonRequest(httprequest.HTTPBaseParams{schema, host, port, token, "outgoing_s2s_number", reqBodyJSONEmpty, "s2s_outgoing"})
-			EjabberdOutgoingS2SNumber.Set(ejabberdMetricValue)
+	for _, m := range metricsList {
+		// Set metrics default values
+		if m.MetricNamespace == "" {
+			m.MetricNamespace = "ejabberd"
 		}
-	}()
+		if m.MetricEjabberdAPIReqBody == "" {
+			m.MetricEjabberdAPIReqBody = `{}`
+		}
 
-	go func() {
-		reqBodyJSON := `{"name": "registeredusers"}`
-		for range ticker.C {
-			ejabberdMetricValue, _ := httprequest.EjabberAPICommonRequest(httprequest.HTTPBaseParams{schema, host, port, token, "stats", reqBodyJSON, "stat"})
-			EjabberdRegisteredUsers.Set(ejabberdMetricValue)
-		}
-	}()
-
-	go func() {
-		reqBodyJSON := `{"name": "onlineusers"}`
-		for range ticker.C {
-			ejabberdMetricValue, _ := httprequest.EjabberAPICommonRequest(httprequest.HTTPBaseParams{schema, host, port, token, "stats", reqBodyJSON, "stat"})
-			EjabberdOnlineUsers.Set(ejabberdMetricValue)
-		}
-	}()
+		newMetricRoutine(schema, host, port, token, m)
+	}
 }
 
-// RegisterMetrics sets up configured metrics
-func RegisterMetrics() {
-	prometheus.MustRegister(EjabberdConnectedUsersNumber)
-	prometheus.MustRegister(EjabberdIncommingS2SNumber)
-	prometheus.MustRegister(EjabberdOutgoingS2SNumber)
-	prometheus.MustRegister(EjabberdRegisteredUsers)
-	prometheus.MustRegister(EjabberdOnlineUsers)
+func newMetricRoutine(schema string, host string, port string, token string, m metricStruct) {
+	scrapeInterval := (time.Duration(5) * time.Second)
+	ticker := time.NewTicker(scrapeInterval)
+
+	prometheusMetric := prometheus.NewGauge(
+		prometheus.GaugeOpts{
+			Namespace: m.MetricNamespace,
+			Name:      m.MetricName,
+			Help:      m.MetricHelp,
+		})
+
+	go func() {
+		for range ticker.C {
+			ejabberdMetricValue, _ := httprequest.EjabberAPICommonRequest(httprequest.HTTPBaseParams{Schema: schema, Host: host, Port: port, Token: token, Endpoint: m.MetricEjabberdAPIEndpoint, ReqBody: m.MetricEjabberdAPIReqBody, EjabberdAPIMetricSourceKey: m.MetricEjabberdAPIMetricSourceKey})
+			prometheusMetric.Set(ejabberdMetricValue)
+		}
+	}()
+	prometheus.MustRegister(prometheusMetric)
 }
