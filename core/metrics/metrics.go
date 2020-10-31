@@ -158,8 +158,7 @@ func RecordMetrics(schema string, host string, port string, token string) {
 }
 
 func newMetricRoutine(schema string, host string, port string, token string, m metricStruct) {
-	scrapeInterval := (time.Duration(5) * time.Second)
-	ticker := time.NewTicker(scrapeInterval)
+	ticker := time.NewTicker((time.Duration(5) * time.Second))
 
 	prometheusMetric := prometheus.NewGauge(
 		prometheus.GaugeOpts{
