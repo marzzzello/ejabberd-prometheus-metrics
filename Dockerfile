@@ -11,7 +11,7 @@ ARG PATH_GO_SOURCES=/go/src/$GO_SERVICE_IMPORT_PATH
 #
 # Build Go binary inside base container.
 #
-FROM golang:1.14 as base_go_docker_image
+FROM golang:1.17 as base_go_docker_image
 # Env variables.
 ARG GIT_TAG
 ARG GIT_BRANCH
@@ -35,7 +35,7 @@ RUN make build
 #
 # Destination container.
 #
-FROM scratch
+FROM golang:1.17
 LABEL key="Ruslan Bobrovnikov <ruslan.bobrovnikov@gmail.com>"
 # Container arguments.
 ARG GIT_TAG
