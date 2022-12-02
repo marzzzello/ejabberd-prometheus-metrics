@@ -11,7 +11,7 @@ import (
 const ServiceName = "ejabberd-metrics-exporter"
 
 // ListenAddr sets address to listen
-var ListenAddr string = ":9334"
+var ListenAddr string = ":9100"
 
 // EjabberdConfStuct configuration parameters
 type EjabberdConfStuct struct {
@@ -33,7 +33,7 @@ func Config() (string, string, string, string) {
 	schema := EjabberdCfg.APIUrlSchema
 	host := EjabberdCfg.APIHost
 	port := EjabberdCfg.APIPort
-	token := "Basic " + EjabberdCfg.APIToken
+	token := "Bearer " + EjabberdCfg.APIToken
 
 	return schema, host, port, token
 }
