@@ -3,7 +3,7 @@ package httprequest
 import (
 	"bytes"
 	"encoding/json"
-	"io/ioutil"
+	"io"
 	"net/http"
 	"strconv"
 	"time"
@@ -51,7 +51,7 @@ func EjabberAPICommonRequest(p HTTPBaseParams) (float64, int) {
 		return float64(ejabberdMetricValue), resp.StatusCode
 	}
 
-	body, err := ioutil.ReadAll(resp.Body)
+	body, err := io.ReadAll(resp.Body)
 	if err != nil {
 		logger.Error.Print("Error reading body. ", err)
 		return 0, 0
