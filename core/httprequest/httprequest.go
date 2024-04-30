@@ -3,7 +3,9 @@ package httprequest
 import (
 	"bytes"
 	"encoding/json"
+	"io/ioutil"
 	"net/http"
+	"strconv"
 	"time"
 
 	"github.com/rbobrovnikov/ejabberd-prometheus-metrics/core/logger"
@@ -49,9 +51,17 @@ func EjabberAPICommonRequest(p HTTPBaseParams) (float64, int) {
 		return float64(ejabberdMetricValue), resp.StatusCode
 	}
 
-	var body map[string]interface{}
-	json.NewDecoder(resp.Body).Decode(&body)
-	ejabberdMetricValue := (body[p.EjabberdAPIMetricSourceKey].(float64))
+	body, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		logger.Error.Print("Error reading body. ", err)
+		return 0, 0
+	}
+	ejabberdMetricValue,err := strconv.ParseFloat(string(body), 64)
+	if err != nil {
+		logger.Error.Print("Error converting to float. ", err)
+		return 0, 0
+	}
+
 	return ejabberdMetricValue, resp.StatusCode
 
 }
